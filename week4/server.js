@@ -76,11 +76,13 @@ const requestListener = async (req, res) => {
           res.end()
           return
         }
+
         const newPackage = await creditPackageRepo.create({
           name: data.name,
           credit_amount: data.credit_amount,
           price: data.price
         })
+
         const result = await creditPackageRepo.save(newPackage)
         res.writeHead(200, headers)
         res.write(JSON.stringify({
@@ -126,7 +128,7 @@ const requestListener = async (req, res) => {
       }))
       res.end()
     } catch (error) {
-      console.error(error)
+      // console.error(error)
       res.writeHead(500, headers)
       res.write(JSON.stringify({
         status: "error",
@@ -154,6 +156,7 @@ const requestListener = async (req, res) => {
         status: "error",
         message: "伺服器錯誤"
       }))
+      res.end()
     }
   } else if (req.url === "/api/coaches/skill" && req.method === "POST") {
     req.on('end', async () => {
@@ -221,6 +224,7 @@ const requestListener = async (req, res) => {
       }
 
       const result = await AppDataSource.getRepository("Skill").delete(skillId)
+
       if (result.affected === 0) {
         res.writeHead(400, headers)
         res.write(JSON.stringify({
